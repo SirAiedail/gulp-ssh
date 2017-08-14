@@ -114,12 +114,14 @@ class GulpSSH extends EventEmitter {
     ssh.gulpReady(execCommand)
 
     function endStream () {
-      outStream.push(new File({
-        cwd: __dirname,
-        base: __dirname,
-        path: path.join(__dirname, options.filePath || 'gulp-ssh.exec.log'),
-        contents: Buffer.concat(chunks, chunkSize)
-      }))
+      if (options.filePath) {
+        outStream.push(new File({
+          cwd: __dirname,
+          base: __dirname,
+          path: path.join(__dirname, options.filePath || 'gulp-ssh.exec.log'),
+          contents: Buffer.concat(chunks, chunkSize)
+        }))
+      }
 
       ssh.end()
       outStream.end()
@@ -317,12 +319,14 @@ class GulpSSH extends EventEmitter {
     commands = Array.isArray(commands) ? commands.slice() : [commands]
 
     function endStream () {
-      outStream.push(new File({
-        cwd: __dirname,
-        base: __dirname,
-        path: path.join(__dirname, options.filePath || 'gulp-ssh.exec.log'),
-        contents: Buffer.concat(chunks, chunkSize)
-      }))
+      if (options.filePath) {
+        outStream.push(new File({
+          cwd: __dirname,
+          base: __dirname,
+          path: path.join(__dirname, options.filePath || 'gulp-ssh.exec.log'),
+          contents: Buffer.concat(chunks, chunkSize)
+        }))
+      }
 
       ssh.end()
       outStream.end()
