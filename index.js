@@ -269,7 +269,7 @@ class GulpSSH extends EventEmitter {
 
     return through.obj(function (file, encoding, callback) {
       if (file.isNull()) {
-        log('"' + colors.cyan(file.path) + '" has no content. Skipping.')
+        if (options.verbose) log('"' + colors.cyan(file.path) + '" has no content. Skipping.')
         return callback()
       }
       getSftp(function (err, sftp) {
@@ -277,11 +277,11 @@ class GulpSSH extends EventEmitter {
 
         let outPath = path.join(destDir, file.relative)
         if (path.sep === '\\') outPath = outPath.replace(/\\/g, '/')
-        log('Preparing to write "' + colors.cyan(outPath) + '"')
+        if (options.verbose) log('Preparing to write "' + colors.cyan(outPath) + '"')
 
         internalMkDirs(sftp, outPath, function (err) {
           if (err) return end(err, callback)
-          log('Writing \'' + colors.cyan(outPath) + '\'')
+          if (options.verbose) log('Writing \'' + colors.cyan(outPath) + '\'')
 
           const write = sftp.createWriteStream(outPath, options)
 
@@ -297,7 +297,7 @@ class GulpSSH extends EventEmitter {
 
           function done (err) {
             if (err) return end(err, callback)
-            log('Finished writing \'' + colors.cyan(outPath) + '\'')
+            if (options.verbose) log('Finished writing \'' + colors.cyan(outPath) + '\'')
             callback()
           }
         })
